@@ -38,13 +38,10 @@ const getAllPlant = async (req, res) => {
 const getPlantById = async (req, res) => {
   const id = req.params.id;
   try {
-    const plant = await Plant.findAll({
-      where: { id_plant: id },
-      include: [db.plant],
-    });
+    const plant = await Plant.findByPk(id);
 
-    if (relations.length > 0) {
-      res.status(200).json({ status: 'Success', message: 'Data retrieved successfully!', data: plant });
+    if (plant) {
+      res.status(200).json({ status: 'Success', message: 'Plant retrieved successfully!', data: plant });
     } else {
       res.status(404).json({ message: 'Plant not found' });
     }
@@ -53,7 +50,6 @@ const getPlantById = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
-
 
 //delete plant
 const deletePlant = async (req, res) => {
