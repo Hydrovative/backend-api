@@ -1,57 +1,28 @@
-//importing modules
+// Importing modules
 const express = require('express');
 const dotenv = require('dotenv').config();
-const session = require('session');
-const cors = require('cors');
-const sequelize =require('sequelize');
+const bodyParser = require('body-parser');
 const db = require('./models');
-const cookieParser = require('cookie-parser');
+const plantRoutes = require('./routes/plantRoutes'); 
 
-
-
-//assigning variable apps
 const app = express();
+const port = process.env.PORT || 3000;
 
-//synchronizing database
-db.sequelize.sync({ force: false }).then(() => {
-    console.log("db has been re-sync");
+// Middleware
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+// Database Connection
+db.sequelize.sync().then(() => {
+  console.log('Database connected');
+}).catch(err => {
+  console.error('Unable to connect to the database:', err);
 });
 
-//cookie secure
-app.use(session({
-    secret: 'keyboard cat',
-    resave: false,
-    saveUninitialized: true,
-    cookie:{secure: true}
-}));
+// Routes
+app.use('/routes', plantRoutes); 
 
-//middleware
-app.use(express.json());
-app.use(cors({credentials: true}));
-app.use(cookieParser());
-app.use(express.urlencoded({extended: false}))
-
-//routes for user API
-app.use();
-app.use();
-app.use();
-app.use();
-app.use();
-app.use();
-app.use();
-
-
-//set up port
-const PORT = process.env.PORT || 8080
-
-//route handler
-app.get('/', (req, res) => {
-    const message = 'Hello, welcome to the Hydrovative API!';
-    console.log('Index route accessed');
-    res.send('Hello There!');
-  });
-
-//port listening
+// Start the server
 app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`);
-  });
+  console.log(`Server is running on port ${port}`);
+});
