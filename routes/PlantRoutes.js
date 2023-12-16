@@ -1,20 +1,17 @@
 const express = require('express');
 const router = express.Router();
-const plantController = require('../controllers')
+const plantController = require('../controllers/PlantControllers');
 
-//Add Plant
-router.post('', plantController.postPlant);
+// Add Plant
+router.post('/', plantController.addNewPlant);
 
-//Get All Plant
-router.post('/', plantController.getAllPlant);
+// Get All Plant
+router.get('/', plantController.getAllPlant);
 
-//Get Plant by id 
-router.post('//:id', plantController.getPlantById);
+// Get Plant by id 
+router.get('/:id', plantController.getPlantById);
 
-//Delete Plant
-router.delete('/', plantController.deleteplant);
-
-//Delete Plant by id
-router.delete('//:id', plantController.deleteplant);
+// Delete Plant by id
+router.delete('/:id', plantController.deletePlant);
 
 module.exports = router;
