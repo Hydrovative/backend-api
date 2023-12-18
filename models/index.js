@@ -4,9 +4,6 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
-// Database connection with dialect of PostgreSQL
-// Port for my database is 5433
-// Database name is discover
 const sequelize = new Sequelize(
   process.env.DATABASE_NAME,
   process.env.DATABASE_USER,
