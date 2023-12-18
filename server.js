@@ -20,7 +20,7 @@ db.sequelize.sync().then(() => {
 });
 
 // Routes
-app.use('/routes', plantRoutes); 
+app.use('/plants', plantRoutes); 
 
 // Start the server
 app.listen(port, () => {
