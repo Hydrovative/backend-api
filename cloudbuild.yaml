@@ -1,23 +1,22 @@
-steps:
-  # Docker Build
-  - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 
-           'us-central1-docker.pkg.dev/$Hydrovative/my-docker-repo/myimage', 
-           '.']
-
-  # Docker Push
-  - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 
-           'us-central1-docker.pkg.dev/$Hydrovative/my-docker-repo/myimage']
-
-  # Entrypoint, timeout and environment variables
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    entrypoint: 'gcloud'
-    timeout: 240s
-    args: ['compute', 'instances', 
-           'create-with-container', 'my-vm-name',
-           '--container-image', 
-           'us-central1-docker.pkg.dev/$Hydrovative/my-docker-repo/myimage']
-    env:
-      - 'CLOUDSDK_COMPUTE_REGION=asia-southeast2'
-      - 'CLOUDSDK_COMPUTE_ZONE=asia-southeast2-c'
+ steps:
+ # Build the container image
+ - name: 'gcr.io/cloud-builders/docker'
+   args: ['build', '-t', 'gcr.io/basic-404613/nandur:$COMMIT_SHA', '.']
+ # Push the container image to Container Registry
+ - name: 'gcr.io/cloud-builders/docker'
+   args: ['push', 'gcr.io/basic-404613/nandur:$COMMIT_SHA']
+ # Deploy container image to Cloud Run
+ - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+   entrypoint: gcloud
+   args:
+   - 'run'
+   - 'deploy'
+   - 'nandur'
+   - '--image'
+   - 'gcr.io/basic-404613/nandur:$COMMIT_SHA'
+#    delete the line below if you want auth (using gcloud iap)
+   - '--allow-unauthenticated'
+   - '--region'
+   - 'asia-southeast2'
+ images:
+ - 'gcr.io/basic-404613/nandur:$COMMIT_SHA'
